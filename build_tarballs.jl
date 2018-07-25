@@ -18,7 +18,7 @@ cd $WORKSPACE/srcdir
 cd bullet3/
 mkdir build
 cd build
-cmake -DBUILD_CLSOCKET=OFF -DBUILD_ENET=OFF -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain -DBUILD_OPENGL3_DEMOS=OFF -DUSE_GRAPHICAL_BENCHMARK=OFF -DBUILD_BULLET2_DEMOS=OFF -DBUILD_CPU_DEMOS=OFF -DUSE_GLUT=OFF -DBUILD_UNIT_TESTS=OFF ..
+cmake -DBUILD_EXTRAS=OFF -DCMAKE_BUILD_TYPE=Release -DBUILD_CLSOCKET=OFF -DBUILD_ENET=OFF -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain -DBUILD_OPENGL3_DEMOS=OFF -DUSE_GRAPHICAL_BENCHMARK=OFF -DBUILD_BULLET2_DEMOS=OFF -DBUILD_CPU_DEMOS=OFF -DUSE_GLUT=OFF -DBUILD_UNIT_TESTS=OFF ..
 make -j${ncore}
 make install
 exit
@@ -36,7 +36,10 @@ platforms = [
     Linux(:i686, :musl),
     Linux(:x86_64, :musl),
     Linux(:aarch64, :musl),
-    Linux(:armv7l, :musl, :eabihf)
+    Linux(:armv7l, :musl, :eabihf),
+    Windows(:x86_64),
+    Windows(:i686),
+    MacOS(:x86_64)
 ]
 
 # The products that we will ensure are always built
@@ -45,16 +48,13 @@ products(prefix) = [
     LibraryProduct(prefix, "libBullet3Dynamics", :libdynamics),
     LibraryProduct(prefix, "libBulletSoftBody", :libsoftbody),
     LibraryProduct(prefix, "libBullet3Collision", :libcollision),
-    LibraryProduct(prefix, "libBullet3Common", :libcommon),
-    LibraryProduct(prefix, "libBullet3OpenCL_clew", :libopencl),
     LibraryProduct(prefix, "libBulletRobotics", :librobotics)
 ]
 
 # Dependencies that must be installed before this package can be built
 dependencies = [
-    
+
 ]
 
 # Build the tarballs, and possibly a `build.jl` as well.
 build_tarballs(ARGS, name, version, sources, script, platforms, products, dependencies)
-
